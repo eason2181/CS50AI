@@ -1,5 +1,7 @@
 import csv
 import sys
+import queue
+import copy
 
 from util import Node, StackFrontier, QueueFrontier
 
@@ -94,13 +96,29 @@ def shortest_path(source, target):
 
     # TODO
     # BFS Method 
-    res = []
+    q = queue.Queue()
+    visited = set()
+    # initialize queue
+    for m in people[source]["movies"]:
+        q.put([(m, source)])
+    while (not q.empty()):
+        currentPath = q.get()
+        currentPair = currentPath[-1]
+        actor = currentPair[1]
+        if actor == target:
+            currentPath.pop(0)
+            return currentPath
+        if actor in visited:
+            continue
+        else:
+            visited.add(actor)
+        neighbors = neighbors_for_person(actor)
+        for neighbor in neighbors:
+            temp = copy.deepcopy(currentPath)
+            temp.append(neighbor)
+            q.put(temp)
 
-    
-    if(len(res) == 0):
-        return None
-    else:
-        return res
+    return None
     raise NotImplementedError
 
 
