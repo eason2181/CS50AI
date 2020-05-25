@@ -93,6 +93,14 @@ def shortest_path(source, target):
     """
 
     # TODO
+    # BFS Method 
+    res = []
+
+    
+    if(len(res) == 0):
+        return None
+    else:
+        return res
     raise NotImplementedError
 
 
