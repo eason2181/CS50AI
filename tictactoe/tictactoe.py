@@ -3,7 +3,7 @@ Tic Tac Toe Player
 """
 
 import math
-
+import copy
 X = "X"
 O = "O"
 EMPTY = None
@@ -22,6 +22,18 @@ def player(board):
     """
     Returns player who has the next turn on a board.
     """
+    countX = 0
+    countO = 0
+    for i in board:
+        for j in i:
+            if j == "X":
+                countX += 1
+            elif j == "O":
+                countO += 1
+    if countX > countO:
+        return "O"
+    else:
+        return "X"
     raise NotImplementedError
 
 
@@ -29,6 +41,18 @@ def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
+    res = []
+    i = 0
+    j = 0
+    for row in board:
+        for col in row:
+            if col == EMPTY:
+                res.append((i, j))
+            j += 1
+        j = 0
+        i += 1
+
+    return res
     raise NotImplementedError
 
 
@@ -36,6 +60,19 @@ def result(board, action):
     """
     Returns the board that results from making move (i, j) on the board.
     """
+    if terminal(board):
+        return board
+    res = copy.deepcopy(board)
+    turn = player(res)
+    i = action[0]
+    j = action[1]
+
+    if turn == X:
+        res[i][j] = 'X'
+    elif turn == O:
+        res[i][j] = 'O'
+
+    return res
     raise NotImplementedError
 
 
@@ -43,13 +80,46 @@ def winner(board):
     """
     Returns the winner of the game, if there is one.
     """
+    numRow = len(board[0])
+    numCol = len(board)
+    #check for row
+    for i in range(0, numRow):
+        row = set([board[i][0], board[i][1], board[i][2]])
+        if len(row) == 1 and board[i][0] != None:
+            return board[i][0]
+
+    #check for col
+    for i in range(0, numCol):
+        col = set([board[0][i], board[1][i], board[2][i]])
+        if len(col) == 1 and board[0][i] != None:
+            return board[0][i]
+
+    #check for diag
+    diag1 = set(board[0][0], board[1][1], board[2][2])
+    diag2 = set(board[0][2], board[1][1], board[2][0])
+    if len(diag1) == 1 or len(diag2) == 1 and board[1][1] != None:
+        return board[1][1]
+
+    return None
     raise NotImplementedError
 
+def isBoardFull(board):
+    for row in board:
+        if EMPTY in row:
+            return False
+
+    return True
 
 def terminal(board):
     """
     Returns True if game is over, False otherwise.
     """
+    if winner(board) != None:
+        return True
+    if isBoardFull(board):
+        return True
+    return False
+
     raise NotImplementedError
 
 
