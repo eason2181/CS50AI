@@ -5,4 +5,4 @@ In this project I used BFS to search for one (out of possibly many) shortest con
 
 Outcome shows:
 
-![](snapshot1.jpg)
+![](https://github.com/eason2181/CS50AI/blob/master/degrees/snapshot1.JPG)
