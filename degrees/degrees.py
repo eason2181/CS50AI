@@ -71,8 +71,8 @@ def main():
     if target is None:
         sys.exit("Person not found.")
 
-    path = shortest_path(source, target)
-
+    #path = shortest_path(source, target)
+    path = shortest_path_backtracing(source, target)
     if path is None:
         print("Not connected.")
     else:
@@ -121,6 +121,45 @@ def shortest_path(source, target):
     return None
     raise NotImplementedError
 
+def backtracing(node):
+    res = [node.state]
+    cur = node
+    while cur.parent != None:
+        res.append(cur.parent.state)
+        cur = cur.parent
+    res.reverse()
+    res.pop(0)
+    return res
+
+def shortest_path_backtracing(source, target):
+    # TODO
+    # BFS Method 
+    q = []
+    visited = set()
+    # initialize queue
+    for m in people[source]["movies"]:
+        n = Node((m, source), None, None)
+        q.append(n)
+    while (q):
+        currentNode = q.pop(0)
+        actor = currentNode.state[1]
+        if actor == target:
+            return backtracing(currentNode)
+        if actor in visited:
+            continue
+        else:
+            visited.add(actor)
+        neighbors = neighbors_for_person(actor)
+        for neighbor in neighbors:
+            if neighbor == currentNode.state:
+                continue
+            temp = Node(neighbor, currentNode, None)
+            q.append(temp)
+            
+    return None
+
+
+    raise NotImplementedError
 
 def person_id_for_name(name):
     """
