@@ -165,15 +165,19 @@ def minimax(board):
         u = -2
         optimalAction = None
         for action in actions(board):
-            if minValue(board) > u:
+            newU = minValue(result(board, action))
+            if newU > u:
                 optimalAction = action
+                u = newU
         return optimalAction
     elif p == O:
         u = 2
         optimalAction = None
         for action in actions(board):
-            if maxValue(board) < u:
+            newU = maxValue(result(board, action))
+            if newU < u:
                 optimalAction = action
+                u = newU
         return optimalAction
 
     raise NotImplementedError
