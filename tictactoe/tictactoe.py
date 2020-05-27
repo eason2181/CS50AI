@@ -41,6 +41,8 @@ def actions(board):
     """
     Returns set of all possible actions (i, j) available on the board.
     """
+    if terminal(board):
+        return (0,0)
     res = []
     i = 0
     j = 0
@@ -95,8 +97,8 @@ def winner(board):
             return board[0][i]
 
     #check for diag
-    diag1 = set(board[0][0], board[1][1], board[2][2])
-    diag2 = set(board[0][2], board[1][1], board[2][0])
+    diag1 = set([board[0][0], board[1][1], board[2][2]])
+    diag2 = set([board[0][2], board[1][1], board[2][0]])
     if len(diag1) == 1 or len(diag2) == 1 and board[1][1] != None:
         return board[1][1]
 
@@ -127,11 +129,51 @@ def utility(board):
     """
     Returns 1 if X has won the game, -1 if O has won, 0 otherwise.
     """
+    if winner(board) == X:
+        return 1
+    if winner(board) == O:
+        return -1
+    return 0
     raise NotImplementedError
 
+def minValue(board):
+    if terminal(board):
+        return utility(board)
+    v = 2
+    for action in actions(board):
+        res = result(board, action)
+        v = min(v, maxValue(res))
+    return v
+def maxValue(board):
+    if terminal(board):
+        return utility(board)
+    v = -2
+    for action in actions(board):
+        res = result(board, action)
+        v = max(v, minValue(res))
+    return v
 
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
     """
+    if terminal(board):
+        return None
+    # X is max player, O is min player
+    p = player(board)
+    if p == X:
+        u = -2
+        optimalAction = None
+        for action in actions(board):
+            if minValue(board) > u:
+                optimalAction = action
+        return optimalAction
+    elif p == O:
+        u = 2
+        optimalAction = None
+        for action in actions(board):
+            if maxValue(board) < u:
+                optimalAction = action
+        return optimalAction
+
     raise NotImplementedError
