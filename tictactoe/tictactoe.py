@@ -188,6 +188,7 @@ def minimax(board):
         return None
     # X is max player, O is min player
     p = player(board)
+<<<<<<< HEAD
     # if p == X:
     #     u = -2
     #     optimalAction = None
@@ -204,4 +205,25 @@ def minimax(board):
     #     return optimalAction
     _ , res = alphaBetaPruning(-2, 2, p, 9, board)
     return res
+=======
+    if p == X:
+        u = -2
+        optimalAction = None
+        for action in actions(board):
+            newU = minValue(result(board, action))
+            if newU > u:
+                optimalAction = action
+                u = newU
+        return optimalAction
+    elif p == O:
+        u = 2
+        optimalAction = None
+        for action in actions(board):
+            newU = maxValue(result(board, action))
+            if newU < u:
+                optimalAction = action
+                u = newU
+        return optimalAction
+
+>>>>>>> d8e82277dd0a918840f37db382f0ba63e14c54e0
     raise NotImplementedError
