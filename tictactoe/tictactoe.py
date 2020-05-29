@@ -153,6 +153,33 @@ def maxValue(board):
         v = max(v, minValue(res))
     return v
 
+# return the score
+def alphaBetaPruning(alpha, beta, player, level, board):
+    if terminal(board) or level == 0:
+        return utility(board), None
+    optimalAct = (0,0)
+    if player == X:
+        for action in actions(board):
+            score, _ = alphaBetaPruning(alpha, beta, O, level-1, result(board, action))
+            if score > alpha:
+                alpha = score
+                optimalAct = action
+            if alpha >= beta:
+                break
+        return alpha, optimalAct
+    elif player == O:
+        for action in actions(board):
+            score, _ = alphaBetaPruning(alpha, beta, X, level-1, result(board, action))
+            if score < beta:
+                beta = score
+                optimalAct = action
+            if alpha >= beta:
+                break
+        return beta, optimalAct
+        
+
+
+
 def minimax(board):
     """
     Returns the optimal action for the current player on the board.
@@ -161,19 +188,20 @@ def minimax(board):
         return None
     # X is max player, O is min player
     p = player(board)
-    if p == X:
-        u = -2
-        optimalAction = None
-        for action in actions(board):
-            if minValue(board) > u:
-                optimalAction = action
-        return optimalAction
-    elif p == O:
-        u = 2
-        optimalAction = None
-        for action in actions(board):
-            if maxValue(board) < u:
-                optimalAction = action
-        return optimalAction
-
+    # if p == X:
+    #     u = -2
+    #     optimalAction = None
+    #     for action in actions(board):
+    #         if minValue(board) > u:
+    #             optimalAction = action
+    #     return optimalAction
+    # elif p == O:
+    #     u = 2
+    #     optimalAction = None
+    #     for action in actions(board):
+    #         if maxValue(board) < u:
+    #             optimalAction = action
+    #     return optimalAction
+    _ , res = alphaBetaPruning(-2, 2, p, 9, board)
+    return res
     raise NotImplementedError
