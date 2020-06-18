@@ -94,6 +94,8 @@ class Sentence():
     def __init__(self, cells, count):
         self.cells = set(cells)
         self.count = count
+        self._known_safes = set()
+        self._known_minds = set()
 
     def __eq__(self, other):
         return self.cells == other.cells and self.count == other.count
@@ -105,12 +107,14 @@ class Sentence():
         """
         Returns the set of all cells in self.cells known to be mines.
         """
+        return self._known_minds
         raise NotImplementedError
 
     def known_safes(self):
         """
         Returns the set of all cells in self.cells known to be safe.
         """
+        return self._known_safes
         raise NotImplementedError
 
     def mark_mine(self, cell):
@@ -118,6 +122,12 @@ class Sentence():
         Updates internal knowledge representation given the fact that
         a cell is known to be a mine.
         """
+        if cell not in self.cells:
+            return
+        self._known_minds.add(cell)
+        self.cells.pop(cell)
+        self.count -= 1
+        return
         raise NotImplementedError
 
     def mark_safe(self, cell):
@@ -125,6 +135,11 @@ class Sentence():
         Updates internal knowledge representation given the fact that
         a cell is known to be safe.
         """
+        if cell not in self.cells:
+            return
+        self._known_safes.add(cell)
+        self.cells.pop(cell)
+        return
         raise NotImplementedError
 
 
