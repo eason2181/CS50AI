@@ -1,2 +1,2 @@
   dddddd
-![](https://github.com/eason2181/CS50AI/edit/master/minesweeper/minesweeper.png)
+![](https://github.com/eason2181/CS50AI/minesweeper/minesweeper.png)
