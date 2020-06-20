@@ -274,6 +274,8 @@ class MinesweeperAI():
         listCell = []
         for cell in availableCells:
             listCell.append(cell)
+        if len(listCell) == 0:
+            return None
         res = random.choices(listCell)[0]
         return res
 
