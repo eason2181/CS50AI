@@ -102,7 +102,10 @@ class Sentence():
 
     def __str__(self):
         return f"{self.cells} = {self.count}"
-
+    def getCount(self):
+        return self.count
+    def getCells(self):
+        return self.cells
     def known_mines(self):
         """
         Returns the set of all cells in self.cells known to be mines.
@@ -203,6 +206,38 @@ class MinesweeperAI():
             5) add any new sentences to the AI's knowledge base
                if they can be inferred from existing knowledge
         """
+        self.moves_made.add(cell)
+        self.safes.add(cell)
+        neighbor = []
+        for i in range(cell[0] - 1, cell[0] + 2):
+            for j in range(cell[1] - 1, cell[1] + 2):
+                if i >= 0 and i <= self.height - 1 and j >= 0 and j <= self.width - 1:
+                    temp = (i, j)
+                    if temp not in self.safes:
+                        neighbor.append(temp)
+        s = Sentence(neighbor, count)
+        self.knowledge.append(Sentence(neighbor, count))
+        for safe in s.known_safes():
+            self.safes.add(safe)
+        for mine in s.known_mines():
+            self.mines.add(mine)
+        for knowledge_ in self.knowledge:
+            if knowledge_ == s:
+                break
+            if s.getCells().issubset(knowledge_.getCells()):
+                newsentence = Sentence(knowledge_.getCells().remove(s.getCells()), knowledge_.getCount() - s.getCount() )
+                self.knowledge.append(newsentence)
+                for safe in newsentence.known_safes():
+                    self.safes.add(safe)
+                for mine in newsentence.known_mines():
+                    self.mines.add(mine)
+            elif knowledge_.getCells().issubset(s.getCells()):
+                newsentence = Sentence(s.getCells().remove(knowledge_.getCells()), s.getCount() - knowledge_.getCount() )
+                self.knowledge.append(newsentence)
+                for safe in newsentence.known_safes():
+                    self.safes.add(safe)
+                for mine in newsentence.known_mines():
+                    self.mines.add(mine)
         raise NotImplementedError
 
     def make_safe_move(self):
