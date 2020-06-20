@@ -107,6 +107,9 @@ class Sentence():
         """
         Returns the set of all cells in self.cells known to be mines.
         """
+        if self.count == len(self.cells):
+            for cell in self.cells:
+                self.known_mines.add(cell)
         return self._known_minds
         raise NotImplementedError
 
@@ -114,6 +117,9 @@ class Sentence():
         """
         Returns the set of all cells in self.cells known to be safe.
         """
+        if self.count == 0:
+            for cell in self.cells:
+                self._known_safes.add(cell)
         return self._known_safes
         raise NotImplementedError
 
